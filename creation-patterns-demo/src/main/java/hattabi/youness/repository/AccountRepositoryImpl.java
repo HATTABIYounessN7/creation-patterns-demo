@@ -8,6 +8,9 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import hattabi.youness.builder.BankDirector;
+import hattabi.youness.model.AccountStatus;
+import hattabi.youness.model.AccountType;
 import hattabi.youness.model.BankAccount;
 
 public class AccountRepositoryImpl implements AccountRepository {
@@ -49,5 +52,19 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     public long getAccountsCount() {
         return accountsCount;
+    }
+
+    public void populate() {
+        BankDirector director = new BankDirector();
+        for (int i = 0; i < 10; i++) {
+            BankAccount acc = director.accountBuilder()
+                    .balance(10000 + Math.random() * 90000)
+                    .type(Math.random() > .5 ? AccountType.CURRENT : AccountType.SAVING)
+                    .status(Math.random() > .5 ? AccountStatus.CREATED : AccountStatus.ACTIVATED)
+                    .currency(Math.random() > .5 ? "MAD" : "EUR")
+                    .build();
+
+            save(acc);
+        }
     }
 }
