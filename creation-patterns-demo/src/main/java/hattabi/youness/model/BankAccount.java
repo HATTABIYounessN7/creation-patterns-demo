@@ -69,4 +69,40 @@ public class BankAccount {
         this.customer = customer;
     }
 
+    public static class AccountBuilder {
+        private final BankAccount account = new BankAccount();
+
+        public AccountBuilder accountId(Long id) {
+            account.accountId = id;
+            return this;
+        }
+
+        public AccountBuilder balance(double balance) {
+            account.balance = balance;
+            return this;
+        }
+
+        public AccountBuilder currency(String currency) {
+            account.currency = currency;
+            return this;
+        }
+
+        public AccountBuilder type(AccountType type) {
+            account.type = type;
+            return this;
+        }
+
+        public AccountBuilder status(AccountStatus s) {
+            account.status = s;
+            return this;
+        }
+
+        public BankAccount build() {
+            return account;
+        }
+    }
+
+    public static AccountBuilder builder() {
+        return new AccountBuilder();
+    }
 }
