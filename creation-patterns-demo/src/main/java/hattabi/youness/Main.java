@@ -1,20 +1,25 @@
 package hattabi.youness;
 
-import hattabi.youness.model.AccountStatus;
-import hattabi.youness.model.AccountType;
-import hattabi.youness.model.BankAccount;
+import java.io.IOException;
+
 import hattabi.youness.repository.AccountRepositoryImpl;
 
 public class Main {
     public static void main(String[] args) {
-        AccountRepositoryImpl repo = new AccountRepositoryImpl();
-        repo.populate();
+        AccountRepositoryImpl repo = AccountRepositoryImpl.getInstance();
+        for (int i = 0; i < 1000; i++) {
+            new Thread(() -> {
+                repo.populate();
+                System.out.println(Thread.currentThread().getName()
+                        + " count=" + repo.getAccountsCount()
+                        + " size=" + repo.findAll().size());
+            }).start();
+        }
 
-        BankAccount account = repo.findById(1L).orElse(null);
-        System.out.println(account);
-
-        repo.search(a -> a.getType() == AccountType.CURRENT).forEach(System.out::println);
-        repo.search(acc -> acc.getType() == AccountType.CURRENT
-                && acc.getStatus() == AccountStatus.ACTIVATED).forEach(System.out::println);
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            System.out.println("IOEXCEPTION: " + e);
+        }
     }
 }

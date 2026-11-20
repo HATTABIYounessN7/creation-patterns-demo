@@ -14,8 +14,22 @@ import hattabi.youness.model.AccountType;
 import hattabi.youness.model.BankAccount;
 
 public class AccountRepositoryImpl implements AccountRepository {
+    private static final AccountRepositoryImpl INSTANCE;
+    private final Object lock = new Object();
     private final Map<Long, BankAccount> accounts = new HashMap<>();
     private long accountsCount = 0;
+
+    static {
+        System.out.println("Singleton instantiation");
+        INSTANCE = new AccountRepositoryImpl();
+    }
+
+    private AccountRepositoryImpl() {
+    }
+
+    public static AccountRepositoryImpl getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public void delete(Long id) {
@@ -34,8 +48,10 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public BankAccount save(BankAccount account) {
-        account.setAccountId(++accountsCount);
-        accounts.put(account.getAccountId(), account);
+        synchronized (lock) {
+            account.setAccountId(++accountsCount);
+            accounts.put(account.getAccountId(), account);
+        }
         return account;
     }
 
