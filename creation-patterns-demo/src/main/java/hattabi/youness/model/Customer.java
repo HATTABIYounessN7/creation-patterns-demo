@@ -1,6 +1,6 @@
 package hattabi.youness.model;
 
-public class Customer {
+public class Customer implements Cloneable {
     private Long id;
     private String name;
 
@@ -28,6 +28,15 @@ public class Customer {
     @Override
     public String toString() {
         return "Customer [id=" + id + ", name=" + name + "]";
+    }
+
+    @Override
+    public Customer clone() {
+        try {
+            return (Customer) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

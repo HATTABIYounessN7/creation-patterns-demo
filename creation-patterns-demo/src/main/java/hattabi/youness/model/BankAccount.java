@@ -1,6 +1,6 @@
 package hattabi.youness.model;
 
-public class BankAccount {
+public class BankAccount implements Cloneable {
     private Long accountId;
     private double balance;
     private String currency;
@@ -67,6 +67,19 @@ public class BankAccount {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    @Override
+    public BankAccount clone() {
+        try {
+            BankAccount copy = (BankAccount) super.clone();
+            copy.setBalance(0);
+            if (this.customer != null)
+                copy.setCustomer(this.customer.clone());
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static class AccountBuilder {
